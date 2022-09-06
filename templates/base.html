@@ -51,12 +51,11 @@
                     <button id="userMenu" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" value="">
                         {{request.user}}
                     </button>
-                    <ul class="dropdown-menu ">
+                    <ul class="dropdown-menu dropdown-menu-lg-end">
                         <li><a class="dropdown-item" href="/changePassword">Change Password</a></li>
-                        <!-- <li><a class="dropdown-item" href="logout.php">Logout</a></li> -->
+                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
                     </ul>
                 </div>
-                <a href='/logout' class='btn btn-danger' >Logout</a>
                 {% comment %} <form class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
