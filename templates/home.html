@@ -2,7 +2,45 @@
 {% block title %}Home{% endblock title %}
 {% block body %}
 <div class='container'>
-    hello {{request.user}} <br>
-    <a href="/logout">logout</a>
+    <h3 class="my-4 text-center">Material Cateogry</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4 ">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-success">Category 1</h5>
+                    <p class="card-text text-left">Material Intro</p>
+                    <a href="khatabook_main.php" class="btn btn-primary w-100">View</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 ">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-success">Category 2</h5>
+                    <p class="card-text text-left">Material Intro</p>
+                    <a href="duty_record.php" class="btn btn-primary w-100">View</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4 ">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-success">Category 3</h5>
+                    <p class="card-text">Material Intro</p>
+                    <a href="logbook_login.php" class="btn btn-primary w-100">View</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 ">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-success">Category 4</h5>
+                    <p class="card-text text-left">Material Intro</p>
+                    <a href="expense_home.php" class="btn btn-primary w-100">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock body %}
