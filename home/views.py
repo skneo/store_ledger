@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Inventory1
+from .models import Inventory1, Transactions
+from .forms import TransactionsForm
 
 # Create your views here.
 
@@ -78,3 +79,18 @@ def inventory(request, inv_id):
     materials = Inventory1.objects.filter(inv_id=inv_id)
     context = {'materials': materials, 'inv_id': inv_id}
     return render(request, 'inventory.html', context)
+
+
+def transactions(request, inv_id, mat_code):
+    if request.user.is_anonymous:
+        return redirect('/')
+    material = Inventory1.objects.get(material_code=mat_code)
+    mat_trans = Transactions.objects.filter(
+        inv_id=inv_id, material_code=mat_code)
+    form = TransactionsForm()
+    # if form.is_valid():
+    # save the form data to model
+    # form.save()
+    context = {'form': form, 'mat_trans': mat_trans, 'inv_id': inv_id,
+               'mat_code': mat_code, 'mat_name': material.material_name, 'balance': material.balance, 'unit': material.unit}
+    return render(request, 'transactions.html', context)
