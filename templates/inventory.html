@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Inventory {{inv_id}}{% endblock title %}
+{% block body %}
+<div class="my-3 text-center">
+    <h3>Inventory: {{inv_id}}</h3>
+    <!-- Modal Button-->
+    <button type="button" class="btn btn-primary my-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Add Material
+    </button>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Material to Inventory {{inv_id}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method='POST' action='/add_material/{{inv_id}}'>
+                        {% csrf_token %}
+                        <div class='mb-3'>
+                            <label for='material_code' class='form-label float-start'>Material Code</label>
+                            <input type='text' class='form-control' id='material_code' name='material_code' required>
+                        </div>
+                        <div class='mb-3'>
+                            <label for='material_name' class='form-label float-start'>Material Name</label>
+                            <input type='text' class='form-control' id='material_name' name='material_name' required>
+                        </div>
+                        <div class='mb-3'>
+                            <label for='balance' class='form-label float-start'>Balance</label>
+                            <input type='text' class='form-control' id='balance' name='balance' required>
+                        </div>
+                        <div class='mb-3'>
+                            <label for='unit' class='form-label float-start'>Unit</label>
+                            <input type='text' class='form-control' id='unit' name='unit' required>
+                        </div>
+                        <div class='mb-3'>
+                            <label for='remark' class='form-label float-start'>Remark</label>
+                            <input type='text' class='form-control' id='remark' name='remark' required>
+                        </div>
+                        <button type='submit' class='btn btn-primary'>Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 mx-3 mb-0 ">
+        <div class="mb-3 ">
+            <table id="table_id" class="table-light table table-striped table-bordered w-100">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Material Code</th>
+                        <th>Material Name</th>
+                        <th>Balance</th>
+                        <th>Remark</th>
+                        <th>In/Out</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for material in materials %}
+                    <tr>
+                        <td>{{material.id}}</td>
+                        <td>{{material.material_code}}</td>
+                        <td>{{material.material_name}}</td>
+                        <td>{{material.balance}} {{material.unit}}</td>
+                        <td>{{material.remark}}</td>
+                        <td><a href="/transactions/inventory/{{inv_id}}/id/{{material.id}}"
+                                class="btn btn-primary btn-sm">View</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- for data table -->
+            <script src="https://code.jquery.com/jquery-3.5.1.js"> </script>
+            <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"> </script>
+            <link href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" rel="stylesheet">
+            <script>
+                $(document).ready(function () {
+                    $('#table_id').DataTable({
+                        "scrollX": true,
+                        // "order": [
+                        //     [1, "desc"]
+                        // ],
+                        "pageLength": 50
+                    });
+                });
+            </script>
+        </div>
+    </div>
+
+</div>
+
+{% endblock body %}
