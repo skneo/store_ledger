@@ -12,3 +12,11 @@ class TransactionsForm(forms.ModelForm):
     class Meta:
         model = Transactions
         fields = "__all__"
+        exclude = ('inv_id', 'balance', 'material_code', 'material_name')
+    CHOICES = [('OUT', 'OUT'), ('IN', 'IN')]
+    in_out = forms.ChoiceField(choices=CHOICES)
+
+    def __init__(self, *args, **kwargs):
+        super(TransactionsForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'

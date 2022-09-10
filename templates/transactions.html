@@ -20,13 +20,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    {% load widget_tweaks %}
                     <form method='POST' action='/transaction/{{inv_id}}'>
                         {% csrf_token %}
                         {% for field in form.visible_fields %}
-                        <div class="mb-3">
+                        <div class="mb-2">
                             {{ field.label_tag }}
-                            {% render_field field class="form-control" %}
+                            {{field}}
                         </div>
                         {% endfor %}
                         {% comment %} <div class='mb-3'>
@@ -49,7 +48,7 @@
                             <label for='remark' class='form-label float-start'>Remark</label>
                             <input type='text' class='form-control' id='remark' name='remark' required>
                         </div> {% endcomment %}
-                        <button type='submit' class='btn btn-primary'>Add</button>
+                        <button type='submit' class='btn btn-primary w-100 mt-2'>Submit</button>
                     </form>
                 </div>
             </div>
