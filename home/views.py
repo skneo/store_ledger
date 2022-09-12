@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Inventory1, Transactions
 from .forms import TransactionsForm
-
+from decimal import *
 # Create your views here.
 
 
@@ -59,7 +59,7 @@ def add_material(request, inv_id):
     if request.user.is_anonymous:
         return redirect('/')
     if request.method == "POST":
-        material_code = request.POST.get('material_code')
+        material_code = request.POST['material_code']
         material_name = request.POST.get('material_name')
         balance = request.POST.get('balance')
         unit = request.POST.get('unit')
@@ -82,15 +82,28 @@ def inventory(request, inv_id):
 
 
 def transactions(request, inv_id, mat_code):
+
     if request.user.is_anonymous:
         return redirect('/')
     material = Inventory1.objects.get(material_code=mat_code)
     mat_trans = Transactions.objects.filter(
         inv_id=inv_id, material_code=mat_code)
     form = TransactionsForm()
-    # if form.is_valid():
-    # save the form data to model
-    # form.save()
+    if request.method == 'POST':
+        new_balance = material.balance-Decimal(request.POST['quantity'])
+        material.balance = new_balance
+        material.save()
+        form_data = Transactions(balance=new_balance, inv_id=inv_id,
+                                 material_code=mat_code, material_name=material.material_name)
+        form = TransactionsForm(request.POST, instance=form_data)
+        # print(form)
+        if form.is_valid():
+            # save the form data to model
+            form.save()
+            messages.success(request, 'material issued ')
+        else:
+            messages.success(request, 'form is not valid ')
+
     context = {'form': form, 'mat_trans': mat_trans, 'inv_id': inv_id,
                'mat_code': mat_code, 'mat_name': material.material_name, 'balance': material.balance, 'unit': material.unit}
     return render(request, 'transactions.html', context)

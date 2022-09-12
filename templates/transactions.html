@@ -20,35 +20,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method='POST' action='/transaction/{{inv_id}}'>
+                    <form method='POST' action='/transactions/inventory/{{inv_id}}/material_code/{{mat_code}}'>
                         {% csrf_token %}
-                        {% for field in form.visible_fields %}
-                        <div class="mb-2">
-                            {{ field.label_tag }}
-                            {{field}}
-                        </div>
-                        {% endfor %}
-                        {% comment %} <div class='mb-3'>
-                            <label for='material_code' class='form-label float-start'>Material Code</label>
-                            <input type='text' class='form-control' id='material_code' name='material_code' required>
-                        </div>
-                        <div class='mb-3'>
-                            <label for='material_name' class='form-label float-start'>Material Name</label>
-                            <input type='text' class='form-control' id='material_name' name='material_name' required>
-                        </div>
-                        <div class='mb-3'>
-                            <label for='balance' class='form-label float-start'>Balance</label>
-                            <input type='text' class='form-control' id='balance' name='balance' required>
-                        </div>
-                        <div class='mb-3'>
-                            <label for='unit' class='form-label float-start'>Unit</label>
-                            <input type='text' class='form-control' id='unit' name='unit' required>
-                        </div>
-                        <div class='mb-3'>
-                            <label for='remark' class='form-label float-start'>Remark</label>
-                            <input type='text' class='form-control' id='remark' name='remark' required>
-                        </div> {% endcomment %}
-                        <button type='submit' class='btn btn-primary w-100 mt-2'>Submit</button>
+                         {{ form.as_div }} 
+                        <button type='submit' class='btn btn-primary w-100'>Add</button>
                     </form>
                 </div>
             </div>

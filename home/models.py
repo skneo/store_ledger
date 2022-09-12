@@ -29,4 +29,4 @@ class Transactions(models.Model):
     remark = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
