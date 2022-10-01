@@ -1,5 +1,5 @@
 from django.db import models
-
+from datetime import datetime
 # Create your models here.
 
 
@@ -26,6 +26,7 @@ class Transactions(models.Model):
     balance = models.DecimalField(max_digits=10, decimal_places=2)
     # unit = models.CharField(max_length=20)
     issued_to = models.CharField(max_length=200)
+    dateTime = models.DateTimeField(default=datetime.now, blank=True)
     remark = models.CharField(max_length=200)
 
     def __str__(self):

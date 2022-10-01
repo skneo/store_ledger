@@ -19,8 +19,7 @@ def index(request):
             login(request, user)
             return redirect('/home')
         else:
-            messages.error(
-                request, 'Login failed! Wrong credentials', extra_tags='danger')
+            messages.error(request, 'Login failed! Wrong credentials')
             return render(request, 'index.html')
     return render(request, 'index.html')
 
@@ -51,7 +50,7 @@ def change_password(request):
         u.set_password(pwd)
         u.save()
         messages.success(request, 'password changed')
-        return render(request, 'change_password.html')
+        return redirect('/')
     return render(request, 'change_password.html')
 
 

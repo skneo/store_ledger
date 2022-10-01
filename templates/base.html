@@ -11,15 +11,15 @@
 
 <body>
     {% include 'header.html' %}
-    {% comment %} Alerts {% endcomment %}
+    <!-- Alerts  -->
     {% if messages %}
     {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}" role="alert">
+    <div class="alert {{ message.tags }}" role="alert">
         {{ message }}
     </div>
     {% endfor %}
     {% endif %}
-    {% comment %} Body {% endcomment %}
+    <!-- Body  -->
     {% block body %}{% endblock body %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"

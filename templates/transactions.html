@@ -5,7 +5,7 @@
     <h3 class="text-center">Inventory: {{inv_id}}</h3>
     <a href='/inventory/{{inv_id}}' class='btn btn-primary btn-sm mb-2'>&larr; Inventory {{inv_id}}</a>
     <h5>Material: {{mat_code}}/{{mat_name}}</h5>
-    <b>Balance: </b>{{balance}} {{unit}}
+    <h5>Balance: {{balance}} {{unit}}</h5>
     <!-- Modal Button-->
     <button type="button" class="btn btn-success btn-sm my-1 float-end" data-bs-toggle="modal"
         data-bs-target="#exampleModal">
@@ -22,7 +22,7 @@
                 <div class="modal-body">
                     <form method='POST' action='/transactions/inventory/{{inv_id}}/material_code/{{mat_code}}'>
                         {% csrf_token %}
-                         {{ form.as_div }} 
+                        {{ form.as_div }}
                         <button type='submit' class='btn btn-primary w-100'>Add</button>
                     </form>
                 </div>
@@ -35,12 +35,11 @@
                 <thead>
                     <tr>
                         <th>Trans. Id</th>
-                        <th>Material Code</th>
-                        <th>Material Name</th>
                         <th>In/Out</th>
                         <th>Quantity</th>
                         <th>Balance</th>
                         <th>Issued To</th>
+                        <th>Date & Time</th>
                         <th>Remark</th>
                     </tr>
                 </thead>
@@ -48,12 +47,11 @@
                     {% for entry in mat_trans %}
                     <tr>
                         <td>{{entry.id}}</td>
-                        <td>{{entry.material_code}}</td>
-                        <td>{{entry.material_name}}</td>
                         <td>{{entry.in_out}}</td>
                         <td>{{entry.quantity}} {{unit}}</td>
                         <td>{{entry.balance}} {{unit}}</td>
                         <td>{{entry.issued_to}}</td>
+                        <td>{{entry.dateTime}}</td>
                         <td>{{entry.remark}}</td>
                     </tr>
                     {% endfor %}
@@ -67,9 +65,9 @@
                 $(document).ready(function () {
                     $('#table_id').DataTable({
                         "scrollX": true,
-                        // "order": [
-                        //     [1, "desc"]
-                        // ],
+                        "order": [
+                            [0, "desc"]
+                        ],
                         "pageLength": 50
                     });
                 });
