@@ -10,5 +10,6 @@ urlpatterns = [
     path('add_material/<str:inv_id>', views.add_material, name='add_material'),
     path('inventory/<str:inv_id>', views.inventory, name='inventory'),
     path('transactions/inventory/<str:inv_id>/material_code/<str:mat_code>',
-         views.transactions, name='transactions')
+         views.transactions, name='transactions'),
+    path('alltransactions', views.alltransactions)
 ]

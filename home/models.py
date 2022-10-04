@@ -24,7 +24,7 @@ class Transactions(models.Model):
     in_out = models.CharField(max_length=10)
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
     balance = models.DecimalField(max_digits=10, decimal_places=2)
-    # unit = models.CharField(max_length=20)
+    unit = models.CharField(max_length=20)
     issued_to = models.CharField(max_length=200)
     dateTime = models.DateTimeField(default=datetime.now, blank=True)
     remark = models.CharField(max_length=200)

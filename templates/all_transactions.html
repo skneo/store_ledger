@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}All Transactions{% endblock title %}
+{% block body %}
+<div class="container my-3">
+    <form method="post">
+        <div class="d-flex mb-3">
+            {% csrf_token %}
+            <input type='date' value="{{ from | date:'Y-m-d'}}" class='form-control' id='from' name='from' required>
+            <input type='date' value="{{to | date:'Y-m-d'}}" class='form-control mx-1' id='to' name='to' required>
+            <button type='submit' class='btn btn-primary '>View</button>
+        </div>
+    </form>
+    <h4>
+        All Transactions between {{ from | date:'Y-m-d'}} to {{to | date:'Y-m-d'}}
+    </h4>
+    <table id="table_id" class="table-light table table-striped table-bordered w-100">
+        <thead>
+            <tr>
+                <th>Trans. Id</th>
+                <th>Inv. Id</th>
+                <th>Material Code</th>
+                <th>Material Name</th>
+                <th>In/Out</th>
+                <th>Quantity</th>
+                <th>Balance</th>
+                <th>Issued To</th>
+                <th>Date & Time</th>
+                <th>Remark</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in alltrans %}
+            <tr>
+                <td>{{entry.id}}</td>
+                <td>{{entry.inv_id}}</td>
+                <td>{{entry.material_code}}</td>
+                <td>{{entry.material_name}}</td>
+                <td>{{entry.in_out}}</td>
+                <td>{{entry.quantity}} {{entry.unit}}</td>
+                <td>{{entry.balance}} {{entry.unit}}</td>
+                <td>{{entry.issued_to}}</td>
+                <td>{{entry.dateTime | date:'Y-m-d H:i'}}</td>
+                <td>{{entry.remark}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!-- for data table -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"> </script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"> </script>
+    <link href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" rel="stylesheet">
+    <script>
+        $(document).ready(function () {
+            $('#table_id').DataTable({
+                "scrollX": true,
+                "order": [
+                    [0, "desc"]
+                ],
+                "pageLength": 10
+            });
+        });
+    </script>
+</div>
+{% endblock body %}

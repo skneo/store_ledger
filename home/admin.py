@@ -13,7 +13,7 @@ admin.site.register(Inventory1, invAdmin)
 
 class transAdmin(admin.ModelAdmin):
     list_display = ('material_code', 'material_name', 'in_out',
-                    'quantity', 'balance', 'issued_to')
+                    'quantity', 'balance', 'issued_to', 'dateTime')
 
 
 admin.site.register(Transactions, transAdmin)

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from .models import Inventory1, Transactions
 from .forms import TransactionsForm
 from decimal import *
+import datetime
 # Create your views here.
 
 
@@ -81,7 +82,6 @@ def inventory(request, inv_id):
 
 
 def transactions(request, inv_id, mat_code):
-
     if request.user.is_anonymous:
         return redirect('/')
     material = Inventory1.objects.get(material_code=mat_code)
@@ -89,20 +89,33 @@ def transactions(request, inv_id, mat_code):
         inv_id=inv_id, material_code=mat_code)
     form = TransactionsForm()
     if request.method == 'POST':
-        new_balance = material.balance-Decimal(request.POST['quantity'])
+        if (request.POST['in_out']) == 'IN':
+            new_balance = material.balance + \
+                abs(Decimal(request.POST['quantity']))
+        else:
+            new_balance = material.balance - \
+                abs(Decimal(request.POST['quantity']))
         material.balance = new_balance
         material.save()
-        form_data = Transactions(balance=new_balance, inv_id=inv_id,
-                                 material_code=mat_code, material_name=material.material_name)
-        form = TransactionsForm(request.POST, instance=form_data)
-        # print(form)
-        if form.is_valid():
-            # save the form data to model
-            form.save()
-            messages.success(request, 'material issued ')
-        else:
-            messages.success(request, 'form is not valid ')
-
+        formData = Transactions(inv_id=inv_id, material_code=mat_code, material_name=material.material_name, unit=material.unit,
+                                in_out=request.POST['in_out'], quantity=request.POST['quantity'], balance=new_balance, issued_to=request.POST['issued_to'], remark=request.POST['remark'])
+        formData.save()
+        messages.success(request, 'material issued ')
     context = {'form': form, 'mat_trans': mat_trans, 'inv_id': inv_id,
                'mat_code': mat_code, 'mat_name': material.material_name, 'balance': material.balance, 'unit': material.unit}
     return render(request, 'transactions.html', context)
+
+
+def alltransactions(request):
+    endDate = datetime.datetime.now()
+    currentDate = datetime.date.today()
+    startDate = datetime.datetime(currentDate.year, currentDate.month, 1)
+    if request.method == 'POST':
+        startDate = request.POST['from']
+        endDate = request.POST['to']
+        format = '%Y-%m-%d'
+        startDate = datetime.datetime.strptime(startDate, format)
+        endDate = datetime.datetime.strptime(endDate, format)
+    alltrans = Transactions.objects.filter(
+        dateTime__date__range=(startDate, endDate))
+    return render(request, 'all_transactions.html', {'alltrans': alltrans, 'from': startDate, 'to': endDate})
