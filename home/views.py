@@ -6,6 +6,8 @@ from .models import Inventory1, Transactions
 from .forms import TransactionsForm
 from decimal import *
 import datetime
+from django.db import IntegrityError
+
 # Create your views here.
 
 
@@ -64,10 +66,17 @@ def add_material(request, inv_id):
         balance = request.POST.get('balance')
         unit = request.POST.get('unit')
         remark = request.POST.get('remark')
-        inv1_object = Inventory1(inv_id=inv_id, material_code=material_code,
-                                 material_name=material_name, balance=balance, unit=unit, remark=remark)
-        inv1_object.save()
-        messages.success(request, 'material added')
+        try:
+            inv1_object = Inventory1(inv_id=inv_id, material_code=material_code,
+                                     material_name=material_name, balance=balance, unit=unit, remark=remark)
+            inv1_object.save()
+            trans = Transactions(inv_id=inv_id, material_code=material_code, material_name=material_name, unit=unit,
+                                 in_out='IN', quantity=balance, balance=balance, issued_to='Stock added first time', remark=remark)
+            trans.save()
+            messages.success(request, 'material added')
+        except IntegrityError:
+            messages.error(
+                request, 'Error! material not added because material code already exists')
         materials = Inventory1.objects.filter(inv_id=inv_id)
         context = {'materials': materials, 'inv_id': inv_id}
         return render(request, 'inventory.html', context)
@@ -85,8 +94,6 @@ def transactions(request, inv_id, mat_code):
     if request.user.is_anonymous:
         return redirect('/')
     material = Inventory1.objects.get(material_code=mat_code)
-    mat_trans = Transactions.objects.filter(
-        inv_id=inv_id, material_code=mat_code)
     form = TransactionsForm()
     if request.method == 'POST':
         if (request.POST['in_out']) == 'IN':
@@ -97,10 +104,12 @@ def transactions(request, inv_id, mat_code):
                 abs(Decimal(request.POST['quantity']))
         material.balance = new_balance
         material.save()
-        formData = Transactions(inv_id=inv_id, material_code=mat_code, material_name=material.material_name, unit=material.unit,
-                                in_out=request.POST['in_out'], quantity=request.POST['quantity'], balance=new_balance, issued_to=request.POST['issued_to'], remark=request.POST['remark'])
-        formData.save()
+        newTrans = Transactions(inv_id=inv_id, material_code=mat_code, material_name=material.material_name, unit=material.unit,
+                                in_out=request.POST['in_out'], quantity=abs(Decimal(request.POST['quantity'])), balance=new_balance, issued_to=request.POST['issued_to'], remark=request.POST['remark'])
+        newTrans.save()
         messages.success(request, 'material issued ')
+    mat_trans = Transactions.objects.filter(
+        inv_id=inv_id, material_code=mat_code)
     context = {'form': form, 'mat_trans': mat_trans, 'inv_id': inv_id,
                'mat_code': mat_code, 'mat_name': material.material_name, 'balance': material.balance, 'unit': material.unit}
     return render(request, 'transactions.html', context)
