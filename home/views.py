@@ -7,6 +7,7 @@ from .forms import TransactionsForm
 from decimal import *
 import datetime
 from django.db import IntegrityError
+from django.db.models import Q
 
 # Create your views here.
 
@@ -128,3 +129,17 @@ def alltransactions(request):
     alltrans = Transactions.objects.filter(
         dateTime__date__range=(startDate, endDate))
     return render(request, 'all_transactions.html', {'alltrans': alltrans, 'from': startDate, 'to': endDate})
+
+
+def search(request):
+    if request.user.is_anonymous:
+        return redirect('/')
+    if request.method == 'GET':
+        q = request.GET['q']
+        q_results = Inventory1.objects.filter(
+            Q(material_code__icontains=q) | Q(material_name__icontains=q))
+        context = {
+            'q_results': q_results,
+            'q': q
+        }
+        return render(request, 'search.html', context)
