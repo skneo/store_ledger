@@ -1,2 +1,2 @@
 # store_ledger
-ledger for store for keeoing record of material in/out
+ledger for store for keeping record of material in/out
